@@ -155,6 +155,7 @@ Digital-Lock-Security-System
 Diploma in Electronic Engineering
 
 Universiti Malaysia Perlis (UniMAP)
+bjonasyang717.jy@gmail.com
 
 LinkedIn:
 https://linkedin.com/in/jonaschinjieyang
