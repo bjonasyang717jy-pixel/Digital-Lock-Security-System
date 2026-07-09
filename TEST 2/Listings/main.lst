@@ -1,0 +1,280 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              03/17/2026 00:27:03 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #ifndef __LCD_I2C_H__
+   2          #define __LCD_I2C_H__
+   3          
+   4          #include <reg51.h>
+   5          #include <intrins.h>
+   6          
+   7          #define LCD_SCL   P0^4
+   8          #define LCD_SDA   P0^5
+   9          #define LCD_ADDR  0x4E
+  10          
+  11          void lcd_slave(unsigned char slave);
+  12          void lcd_init(void);
+  13          void lcd_send_cmd(unsigned char cmd);
+  14          void lcd_send_data(unsigned char dataw);
+  15          void lcd_send_str(unsigned char *p);
+  16          void lcd_write_line(unsigned char *str, unsigned char line);
+  17          
+  18          void delay_ms(unsigned int n);
+  19          
+  20          void i2c_start(void);
+  21          void i2c_stop(void);
+  22          void i2c_ACK(void);
+  23          void i2c_write(unsigned char dat);
+  24          
+  25          #endif
+  26          
+  27          /* I2C pin */
+  28          sbit scl = LCD_SCL;
+  29          sbit sda = LCD_SDA;
+  30          
+  31          /* keypad rows (5 rows) */
+  32          sbit R1 = P2^0;
+  33          sbit R2 = P2^1;
+  34          sbit R3 = P2^2;
+  35          sbit R4 = P2^3;
+  36          sbit R5 = P2^4;
+  37          
+  38          /* keypad columns (4 columns) */
+  39          sbit C1 = P2^5;
+  40          sbit C2 = P2^6;
+  41          sbit C3 = P2^7;
+  42          sbit C4 = P3^0;
+  43          
+  44          unsigned char slave_add;
+  45          
+  46          /* keypad layout */
+  47          char keypad[5][4] =
+  48          {
+  49          {'A','B','#','*'},
+  50          {'1','2','3','C'},
+  51          {'4','5','6','D'},
+  52          {'7','8','9','E'},
+  53          {'F','0','G','H'}
+  54          };
+C51 COMPILER V9.60.7.0   MAIN                                                              03/17/2026 00:27:03 PAGE 2   
+
+  55          
+  56          /* I2C START */
+  57          void i2c_start()
+  58          {
+  59   1          sda = 1; _nop_();
+  60   1          scl = 1; _nop_();
+  61   1          sda = 0; _nop_();
+  62   1      }
+  63          
+  64          /* I2C STOP */
+  65          void i2c_stop()
+  66          {
+  67   1          scl = 0;
+  68   1          sda = 0;
+  69   1          scl = 1;
+  70   1          sda = 1;
+  71   1      }
+  72          
+  73          /* Slave address */
+  74          void lcd_slave(unsigned char slave)
+  75          {
+  76   1          slave_add = slave;
+  77   1      }
+  78          
+  79          /* ACK */
+  80          void i2c_ACK()
+  81          {
+  82   1          scl = 0;
+  83   1          sda = 1;
+  84   1          scl = 1;
+  85   1          _nop_(); _nop_();
+  86   1          scl = 0;
+  87   1      }
+  88          
+  89          /* Write byte */
+  90          void i2c_write(unsigned char dat)
+  91          {
+  92   1          unsigned char i;
+  93   1      
+  94   1          for(i=0;i<8;i++)
+  95   1          {
+  96   2              scl = 0;
+  97   2              sda = (dat & (0x80>>i)) ? 1:0;
+  98   2              _nop_();_nop_();
+  99   2              scl = 1;
+ 100   2              _nop_();_nop_();
+ 101   2          }
+ 102   1      
+ 103   1          scl = 0;
+ 104   1      }
+ 105          
+ 106          /* Delay */
+ 107          void delay_ms(unsigned int n)
+ 108          {
+ 109   1          unsigned int m;
+ 110   1      
+ 111   1          while(n--)
+ 112   1              for(m=121;m>0;m--)
+ 113   1                  _nop_();
+ 114   1      }
+ 115          
+ 116          /* Send LCD command */
+C51 COMPILER V9.60.7.0   MAIN                                                              03/17/2026 00:27:03 PAGE 3   
+
+ 117          void lcd_send_cmd(unsigned char cmd)
+ 118          {
+ 119   1          unsigned char cmd_l,cmd_u;
+ 120   1      
+ 121   1          cmd_l=(cmd<<4)&0xF0;
+ 122   1          cmd_u=cmd&0xF0;
+ 123   1      
+ 124   1          i2c_start();
+ 125   1          i2c_write(slave_add);
+ 126   1          i2c_ACK();
+ 127   1      
+ 128   1          i2c_write(cmd_u|0x0C); i2c_ACK(); delay_ms(1);
+ 129   1          i2c_write(cmd_u|0x08); i2c_ACK(); delay_ms(2);
+ 130   1      
+ 131   1          i2c_write(cmd_l|0x0C); i2c_ACK(); delay_ms(1);
+ 132   1          i2c_write(cmd_l|0x08); i2c_ACK(); delay_ms(2);
+ 133   1      
+ 134   1          i2c_stop();
+ 135   1      }
+ 136          
+ 137          /* Send LCD data */
+ 138          void lcd_send_data(unsigned char data)
+*** ERROR C141 IN LINE 138 OF main.c: syntax error near ')', expected '<id>'
+ 139          {
+*** ERROR C236 IN LINE 139 OF main.c: '_lcd_send_data': different length of parameter lists
+ 140   1          unsigned char data_l,data_u;
+ 141   1      
+ 142   1          data_l=(data<<4)&0xF0;
+*** ERROR C141 IN LINE 142 OF main.c: syntax error near '<<', expected 'bit'
+*** ERROR C141 IN LINE 142 OF main.c: syntax error near ')', expected ';'
+*** ERROR C190 IN LINE 142 OF main.c: '&': not an lvalue
+ 143   1          data_u=data&0xF0;
+*** ERROR C141 IN LINE 143 OF main.c: syntax error near 'data', expected 'sizeof'
+*** ERROR C190 IN LINE 143 OF main.c: '&': not an lvalue
+ 144   1      
+ 145   1          i2c_start();
+ 146   1          i2c_write(slave_add);
+ 147   1          i2c_ACK();
+ 148   1      
+ 149   1          i2c_write(data_u|0x0D); i2c_ACK(); delay_ms(1);
+ 150   1          i2c_write(data_u|0x09); i2c_ACK(); delay_ms(2);
+ 151   1      
+ 152   1          i2c_write(data_l|0x0D); i2c_ACK(); delay_ms(1);
+ 153   1          i2c_write(data_l|0x09); i2c_ACK(); delay_ms(2);
+ 154   1      
+ 155   1          i2c_stop();
+ 156   1      }
+ 157          
+ 158          /* Send string */
+ 159          void lcd_send_str(unsigned char *p)
+ 160          {
+ 161   1          while(*p)
+ 162   1              lcd_send_data(*p++);
+ 163   1      }
+ 164          
+ 165          /* LCD init */
+ 166          void lcd_init()
+ 167          {
+ 168   1          delay_ms(15);
+ 169   1      
+ 170   1          lcd_send_cmd(0x02);
+ 171   1          delay_ms(2);
+C51 COMPILER V9.60.7.0   MAIN                                                              03/17/2026 00:27:03 PAGE 4   
+
+ 172   1      
+ 173   1          lcd_send_cmd(0x28);
+ 174   1          delay_ms(2);
+ 175   1      
+ 176   1          lcd_send_cmd(0x0C);
+ 177   1          delay_ms(2);
+ 178   1      
+ 179   1          lcd_send_cmd(0x06);
+ 180   1          delay_ms(2);
+ 181   1      
+ 182   1          lcd_send_cmd(0x01);
+ 183   1          delay_ms(5);
+ 184   1      }
+ 185          
+ 186          /* write line */
+ 187          void lcd_write_line(unsigned char *str,unsigned char line)
+ 188          {
+ 189   1          unsigned char len=0;
+ 190   1      
+ 191   1          if(line==1)
+ 192   1              lcd_send_cmd(0x80);
+ 193   1          else if(line==2)
+ 194   1              lcd_send_cmd(0xC0);
+ 195   1          else
+ 196   1              return;
+ 197   1      
+ 198   1          lcd_send_str(str);
+ 199   1      
+ 200   1          while(str[len]!='\0') len++;
+ 201   1      
+ 202   1          for(;len<16;len++)
+ 203   1              lcd_send_data(' ');
+ 204   1      }
+ 205          
+ 206          /* keypad scan */
+ 207          char keypad_scan()
+ 208          {
+ 209   1          char row;
+ 210   1      
+ 211   1          R1=R2=R3=R4=R5=1;
+ 212   1      
+ 213   1          for(row=0;row<5;row++)
+ 214   1          {
+ 215   2              R1=R2=R3=R4=R5=1;
+ 216   2      
+ 217   2              if(row==0) R1=0;
+ 218   2              if(row==1) R2=0;
+ 219   2              if(row==2) R3=0;
+ 220   2              if(row==3) R4=0;
+ 221   2              if(row==4) R5=0;
+ 222   2      
+ 223   2              if(C1==0){delay_ms(20);while(C1==0);return keypad[row][0];}
+ 224   2              if(C2==0){delay_ms(20);while(C2==0);return keypad[row][1];}
+ 225   2              if(C3==0){delay_ms(20);while(C3==0);return keypad[row][2];}
+ 226   2              if(C4==0){delay_ms(20);while(C4==0);return keypad[row][3];}
+ 227   2          }
+ 228   1      
+ 229   1          return 0;
+ 230   1      }
+ 231          
+ 232          /* main program */
+ 233          void main()
+C51 COMPILER V9.60.7.0   MAIN                                                              03/17/2026 00:27:03 PAGE 5   
+
+ 234          {
+ 235   1          char key;
+ 236   1      
+ 237   1          lcd_slave(LCD_ADDR);
+ 238   1      
+ 239   1          lcd_init();
+ 240   1      
+ 241   1          lcd_write_line("PRESS KEY:",1);
+ 242   1      
+ 243   1          while(1)
+ 244   1          {
+ 245   2              key = keypad_scan();
+ 246   2      
+ 247   2              if(key!=0)
+ 248   2              {
+ 249   3                  lcd_send_cmd(0xC0);
+ 250   3                  lcd_send_data(key);
+ 251   3              }
+ 252   2          }
+ 253   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  7 ERROR(S)

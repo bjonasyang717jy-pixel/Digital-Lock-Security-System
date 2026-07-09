@@ -1,0 +1,48 @@
+C51 COMPILER V9.60.7.0   LCD_I2C                                                           03/17/2026 00:24:02 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD_I2C
+OBJECT MODULE PLACED IN .\Objects\lcd_i2c.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lcd_i2c.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\l
+                    -cd_i2c.lst) TABS(2) OBJECT(.\Objects\lcd_i2c.obj)
+
+line level    source
+
+   1          #include "lcd_i2c.h"
+*** ERROR C141 IN LINE 14 OF lcd_i2c.h: syntax error near ')', expected '<id>'
+   2          
+   3          sbit scl = LCD_SCL;
+   4          sbit sda = LCD_SDA;
+   5          
+   6          unsigned char slave_add;
+   7          
+   8          i2c_start()
+   9          i2c_stop()
+  10          i2c_ACK()
+*** ERROR C132 IN LINE 10 OF lcd_i2c.c: 'i2c_stop': not in formal parameter list
+*** ERROR C141 IN LINE 10 OF lcd_i2c.c: syntax error near 'i2c_ACK', expected ';'
+  11          i2c_write()
+*** ERROR C132 IN LINE 11 OF lcd_i2c.c: 'i2c_ACK': not in formal parameter list
+*** ERROR C141 IN LINE 11 OF lcd_i2c.c: syntax error near 'i2c_write', expected ';'
+  12          delay_ms()
+*** ERROR C132 IN LINE 12 OF lcd_i2c.c: 'i2c_write': not in formal parameter list
+*** ERROR C141 IN LINE 12 OF lcd_i2c.c: syntax error near 'delay_ms', expected ';'
+  13          lcd_send_cmd()
+*** ERROR C132 IN LINE 13 OF lcd_i2c.c: 'delay_ms': not in formal parameter list
+*** ERROR C141 IN LINE 13 OF lcd_i2c.c: syntax error near 'lcd_send_cmd', expected ';'
+  14          lcd_send_data()
+*** ERROR C132 IN LINE 14 OF lcd_i2c.c: 'lcd_send_cmd': not in formal parameter list
+*** ERROR C141 IN LINE 14 OF lcd_i2c.c: syntax error near 'lcd_send_data', expected ';'
+  15          lcd_send_str()
+*** ERROR C132 IN LINE 15 OF lcd_i2c.c: 'lcd_send_data': not in formal parameter list
+*** ERROR C141 IN LINE 15 OF lcd_i2c.c: syntax error near 'lcd_send_str', expected ';'
+  16          lcd_init()
+*** ERROR C132 IN LINE 16 OF lcd_i2c.c: 'lcd_send_str': not in formal parameter list
+*** ERROR C141 IN LINE 16 OF lcd_i2c.c: syntax error near 'lcd_init', expected ';'
+  17          lcd_write_line()
+*** ERROR C132 IN LINE 17 OF lcd_i2c.c: 'lcd_init': not in formal parameter list
+*** ERROR C141 IN LINE 17 OF lcd_i2c.c: syntax error near 'lcd_write_line', expected ';'
+*** ERROR C132 IN LINE 17 OF lcd_i2c.c: 'lcd_write_line': not in formal parameter list
+*** ERROR C141 IN LINE 17 OF lcd_i2c.c: syntax error near '', expected ';'
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  19 ERROR(S)
